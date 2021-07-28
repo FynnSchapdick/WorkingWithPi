@@ -23,3 +23,5 @@ network={
 }
 ```
 
+Default ssh credentials -> pi / raspberry
+
