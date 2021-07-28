@@ -25,3 +25,9 @@ network={
 
 Default ssh credentials -> pi / raspberry
 
+## Install Docker on Pi
+
+```
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker pi
+```
