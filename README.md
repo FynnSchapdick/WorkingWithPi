@@ -134,7 +134,7 @@ services:
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:6.2.0
+    image: confluentinc/cp-enterprise-control-center:latest
     hostname: control-center
     container_name: control-center
     depends_on:
@@ -180,7 +180,7 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
 
   ksqldb-cli:
-    image: confluentinc/cp-ksqldb-cli:6.2.0
+    image: confluentinc/cp-ksqldb-cli:latest
     container_name: ksqldb-cli
     depends_on:
       - broker
@@ -190,7 +190,7 @@ services:
     tty: true
 
   ksql-datagen:
-    image: confluentinc/ksqldb-examples:6.2.0
+    image: confluentinc/ksqldb-examples:latest
     hostname: ksql-datagen
     container_name: ksql-datagen
     depends_on:
@@ -212,7 +212,7 @@ services:
       STREAMS_SCHEMA_REGISTRY_PORT: 8081
 
   rest-proxy:
-    image: confluentinc/cp-kafka-rest:6.2.0
+    image: confluentinc/cp-kafka-rest:latest
     depends_on:
       - broker
       - schema-registry
@@ -225,9 +225,10 @@ services:
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+
 ```
 
-Start Kafka
+Start Confluent Platform
 
 ```
 docker-compose up -d
