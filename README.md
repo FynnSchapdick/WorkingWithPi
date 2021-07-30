@@ -51,7 +51,7 @@ For example:
 version: '2'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    image: confluentinc/cp-zookeeper:6.2.0
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -61,7 +61,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
-    image: confluentinc/cp-server:latest
+    image: confluentinc/cp-server:6.2.0
     hostname: broker
     container_name: broker
     depends_on:
@@ -90,7 +90,7 @@ services:
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:latest
+    image: confluentinc/cp-schema-registry:6.2.0
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
@@ -103,7 +103,7 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   connect:
-    image: cnfldemos/cp-server-connect-datagen:latest
+    image: cnfldemos/cp-server-connect-datagen:0.5.0-6.2.0
     hostname: connect
     container_name: connect
     depends_on:
@@ -134,36 +134,63 @@ services:
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:latest
+    image: confluentinc/cp-enterprise-control-center:6.2.0
     hostname: control-center
     container_name: control-center
-     depends_on: - broker - schema-registry  - connect - ksqldb-server
+    depends_on:
+      - broker
+      - schema-registry
+      - connect
+      - ksqldb-server
     ports:
       - "9021:9021"
     environment:
-      control_center_bootstrap_servers: 'broker:29092'
-      control_center_connect_connect-default_cluster: 'connect:8083'
-      control_center_ksql_ksqldb1_url: "http://ksqldb-server:8088"
-      control_center_ksql_ksqldb1_advertised_url: "http://localhost:8088"
-      control_center_schema_registry_url: "http://schema-registry:8081"
-      control_center_replication_factor: 1
-      control_center_internal_topics_partitions: 1
-      control_center_monitoring_interceptor_topic_partitions: 1
-      confluent_metrics_topic_replication: 1
-      port: 9021
-      
-    ksqldb-cli:
-        image: confluentinc/cp-ksqldb-cli:latest
-        container_name: ksqldb-cli
-        depends_on:
-          - broker
-          - connect
-          - ksqldb-server
-        entrypoint: /bin/sh
-        tty: true
-      
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
+      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: 'connect:8083'
+      CONTROL_CENTER_KSQL_KSQLDB1_URL: "http://ksqldb-server:8088"
+      CONTROL_CENTER_KSQL_KSQLDB1_ADVERTISED_URL: "http://localhost:8088"
+      CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
+      CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+      PORT: 9021
+
+  ksqldb-server:
+    image: confluentinc/cp-ksqldb-server:6.2.0
+    hostname: ksqldb-server
+    container_name: ksqldb-server
+    depends_on:
+      - broker
+      - connect
+    ports:
+      - "8088:8088"
+    environment:
+      KSQL_CONFIG_DIR: "/etc/ksql"
+      KSQL_BOOTSTRAP_SERVERS: "broker:29092"
+      KSQL_HOST_NAME: ksqldb-server
+      KSQL_LISTENERS: "http://0.0.0.0:8088"
+      KSQL_CACHE_MAX_BYTES_BUFFERING: 0
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      KSQL_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+      KSQL_KSQL_CONNECT_URL: "http://connect:8083"
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+
+  ksqldb-cli:
+    image: confluentinc/cp-ksqldb-cli:6.2.0
+    container_name: ksqldb-cli
+    depends_on:
+      - broker
+      - connect
+      - ksqldb-server
+    entrypoint: /bin/sh
+    tty: true
+
   ksql-datagen:
-    image: confluentinc/ksqldb-examples:latest
+    image: confluentinc/ksqldb-examples:6.2.0
     hostname: ksql-datagen
     container_name: ksql-datagen
     depends_on:
@@ -185,7 +212,7 @@ services:
       STREAMS_SCHEMA_REGISTRY_PORT: 8081
 
   rest-proxy:
-    image: confluentinc/cp-kafka-rest:latest
+    image: confluentinc/cp-kafka-rest:6.2.0
     depends_on:
       - broker
       - schema-registry
@@ -197,8 +224,9 @@ services:
       KAFKA_REST_HOST_NAME: rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
-      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'      
 ```
+      
 
 Start Confluent Platform
 
