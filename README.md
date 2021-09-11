@@ -62,6 +62,18 @@ And then restart the service
 sudo service ssh restart
 ```
 
+## SSH-Keys
+
+Generate a new ssh-key
+```
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+Add ssh-key to agent
+```
+ssh-add ~/.ssh/id_ed25519
+```
+
 ## Install Docker on Pi
 
 ```
