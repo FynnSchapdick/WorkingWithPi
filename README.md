@@ -42,9 +42,24 @@ Check if hostname contains in any configurations
 sudo grep -lr "{ALTER_NAME}" /etc/*
 ```
 
-Note: After changing hostname, the hostname must not contain in the "/etc/hosts", so you have to change it by
+Important: After changing hostname, the hostname must not contain in the "/etc/hosts", so you have to change it by
 ```
 sudo nano /etc/hosts
+```
+
+and you have to remove all ssh-keys for that hostname
+```
+sudo rm /etc/ssh/ssh_host_*
+```
+
+After that we have to reconfigure the ssh-server
+```
+sudo dpkg-reconfigure openssh-server
+```
+
+And then restart the service
+```
+sudo service ssh restart
 ```
 
 ## Install Docker on Pi
