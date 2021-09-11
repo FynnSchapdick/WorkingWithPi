@@ -74,6 +74,24 @@ Add ssh-key to agent
 ssh-add ~/.ssh/{KeyName}
 ```
 
+## Install latest Ansible on Pi
+First of all , you have to update the package.list via 
+```
+nano /etc/apt/sources.list
+```
+
+Then add following line
+```
+deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main
+```
+
+After updating the package.list, you have can install ansible
+```
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+apt update
+apt install ansible
+```
+
 ## Install Docker on Pi
 
 ```
