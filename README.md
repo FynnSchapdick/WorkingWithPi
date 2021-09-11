@@ -71,7 +71,7 @@ ssh-keygen -t ed25519 -C "your_email@example.com"
 
 Add ssh-key to agent
 ```
-ssh-add ~/.ssh/id_ed25519
+ssh-add ~/.ssh/{KeyName}
 ```
 
 ## Install Docker on Pi
