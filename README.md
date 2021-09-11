@@ -42,6 +42,11 @@ Check if hostname contains in any configurations
 sudo grep -lr "{ALTER_NAME}" /etc/*
 ```
 
+Note: After changing hostname, the hostname must not contain in the "/etc/hosts", so you have to change it by
+```
+sudo nano /etc/hosts
+```
+
 ## Install Docker on Pi
 
 ```
