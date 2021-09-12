@@ -71,7 +71,7 @@ ssh-keygen -t ed25519 -C "your_email@example.com"
 
 Add ssh-key to agent
 ```
-ssh-add ~/.ssh/{KeyName}
+alias ssha='eval $(ssh-agent) && ssh-add'
 ```
 
 ## Install latest Ansible on Pi
